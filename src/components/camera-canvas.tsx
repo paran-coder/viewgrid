@@ -1,9 +1,25 @@
 "use client";
 
-import { Camera, ImageOff, Info, Replace, Rotate3D, Target, Trash2 } from "lucide-react";
-import { useMemo, useRef, useState, type PointerEvent, type WheelEvent } from "react";
+import {
+  Camera,
+  ImageOff,
+  Info,
+  Replace,
+  Rotate3D,
+  Target,
+  Trash2,
+} from "lucide-react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PointerEvent,
+  type WheelEvent,
+} from "react";
 
 import { QualityBadge } from "@/components/quality-badge";
+import { calculateOrbitLayout } from "@/lib/orbit-layout";
 import {
   buildRingPath,
   cameraFromOrbitDrag,
@@ -54,6 +70,34 @@ export function CameraCanvas() {
   const stageRef = useRef<HTMLDivElement>(null);
   const interactionRef = useRef<InteractionState>(null);
   const [orbitView, setOrbitView] = useState<OrbitViewState>(DEFAULT_ORBIT_VIEW);
+  const [stageSize, setStageSize] = useState({ width: 960, height: 620 });
+  const [sourceSize, setSourceSize] = useState({ width: 1, height: 1 });
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const updateSize = () => {
+      const rect = stage.getBoundingClientRect();
+      setStageSize({ width: rect.width, height: rect.height });
+    };
+
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, [image?.url]);
+
+  const orbitLayout = useMemo(
+    () =>
+      calculateOrbitLayout({
+        stageWidth: stageSize.width,
+        stageHeight: stageSize.height,
+        imageWidth: sourceSize.width,
+        imageHeight: sourceSize.height,
+      }),
+    [sourceSize, stageSize],
+  );
 
   const orbitPaths = useMemo(
     () => ({
@@ -197,22 +241,11 @@ export function CameraCanvas() {
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] [mask-image:linear-gradient(to_bottom,transparent,black_18%,black_82%,transparent)] bg-[size:32px_32px]" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_26%,rgba(2,4,7,.72)_100%)]" />
 
-        <svg
-          className="pointer-events-none absolute inset-0 z-10 size-full"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path d={orbitPaths.xy} fill="none" stroke="rgba(252,213,53,.35)" strokeWidth="0.15" />
-          <path d={orbitPaths.xz} fill="none" stroke="rgba(16,185,129,.32)" strokeWidth="0.15" />
-          <path d={orbitPaths.yz} fill="none" stroke="rgba(245,158,11,.28)" strokeWidth="0.15" />
-        </svg>
-
-        <div className="pointer-events-none absolute top-3 left-3 z-30 rounded-md border border-white/8 bg-black/45 px-2.5 py-1.5 text-[10px] text-white/65 backdrop-blur-sm">
+        <div className="pointer-events-none absolute top-3 left-3 z-40 rounded-md border border-white/8 bg-black/45 px-2.5 py-1.5 text-[10px] text-white/65 backdrop-blur-sm">
           ORBIT EDITOR · {orbitViewLabel(orbitView)}
         </div>
 
-        <div className="pointer-events-none absolute right-3 top-3 z-30 hidden max-w-[320px] rounded-md border border-white/8 bg-black/45 px-3 py-2 text-[11px] leading-5 text-white/72 backdrop-blur-sm lg:block">
+        <div className="pointer-events-none absolute right-3 top-3 z-40 hidden max-w-[320px] rounded-md border border-white/8 bg-black/45 px-3 py-2 text-[11px] leading-5 text-white/72 backdrop-blur-sm lg:block">
           <div className="flex items-center gap-1.5 font-semibold text-white/82">
             <Rotate3D className="size-3.5" aria-hidden="true" />
             360° 궤도 편집
@@ -223,76 +256,124 @@ export function CameraCanvas() {
         </div>
 
         <div
-          className="pointer-events-none absolute left-1/2 top-1/2 z-20 flex size-[min(64vw,420px)] max-h-[74%] max-w-[40%] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[18px] border border-white/8 bg-black/10 shadow-[0_28px_90px_rgba(0,0,0,.42)] backdrop-blur-[1px] sm:max-w-[36%]"
+          className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
           style={{
-            transform: `translate(-50%, -50%) rotateX(${-orbitView.pitch * 0.6}deg) rotateY(${orbitView.yaw * 0.8}deg) scale(${0.94 + orbitView.zoom * 0.06})`,
-            transformStyle: "preserve-3d",
+            width: orbitLayout.orbitWidth,
+            height: orbitLayout.orbitHeight,
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={image.url}
-            alt="업로드한 원본"
-            decoding="async"
-            className="size-full rounded-[14px] object-contain"
-          />
+          <svg
+            className="absolute inset-0 size-full"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d={orbitPaths.xy}
+              fill="none"
+              stroke="rgba(252,213,53,.35)"
+              strokeWidth="0.15"
+            />
+            <path
+              d={orbitPaths.xz}
+              fill="none"
+              stroke="rgba(16,185,129,.32)"
+              strokeWidth="0.15"
+            />
+            <path
+              d={orbitPaths.yz}
+              fill="none"
+              stroke="rgba(245,158,11,.28)"
+              strokeWidth="0.15"
+            />
+          </svg>
+
+          <div
+            className="absolute left-1/2 top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[18px] border border-white/8 bg-black/10 shadow-[0_28px_90px_rgba(0,0,0,.42)] backdrop-blur-[1px]"
+            style={{
+              width: orbitLayout.imageWidth,
+              height: orbitLayout.imageHeight,
+              transform: `translate(-50%, -50%) rotateX(${-orbitView.pitch * 0.6}deg) rotateY(${orbitView.yaw * 0.8}deg) scale(${0.94 + orbitView.zoom * 0.06})`,
+              transformStyle: "preserve-3d",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={image.url}
+              alt="업로드한 원본"
+              decoding="async"
+              onLoad={(event) =>
+                setSourceSize({
+                  width: event.currentTarget.naturalWidth || 1,
+                  height: event.currentTarget.naturalHeight || 1,
+                })
+              }
+              className="size-full rounded-[14px] object-contain"
+            />
+          </div>
+
+          <span className="border-signal/55 bg-canvas/78 text-signal absolute left-1/2 top-1/2 z-30 grid size-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border shadow-[0_0_20px_rgba(252,213,53,.18)] backdrop-blur-sm">
+            <Target className="size-3.5" aria-hidden="true" />
+          </span>
+
+          {cameras
+            .map((camera) => ({
+              camera,
+              point: projectCameraToOrbit(camera, orbitView),
+              quality: getCameraQuality(camera),
+            }))
+            .sort((left, right) => left.point.zIndex - right.point.zIndex)
+            .map(({ camera, point, quality }) => {
+              const selected = camera.id === selectedCameraId;
+              const backside = inferBackside(camera);
+              return (
+                <button
+                  key={camera.id}
+                  type="button"
+                  onClick={() => selectCamera(camera.id)}
+                  onPointerDown={(event) =>
+                    startCameraDrag(event, camera.id, camera.yaw, camera.pitch)
+                  }
+                  className={cn(
+                    "camera-marker pointer-events-auto absolute transition-[left,top,transform,opacity] duration-200 motion-reduce:transition-none",
+                    selected && "camera-marker-selected",
+                    !camera.active && "grayscale",
+                    backside && "border-dashed",
+                  )}
+                  style={{
+                    left: `${point.leftPercent}%`,
+                    top: `${point.topPercent}%`,
+                    zIndex: point.zIndex,
+                    opacity: camera.active ? point.opacity : 0.34,
+                    transform: `translate(-50%, -50%) scale(${selected ? point.scale * 1.12 : point.scale})`,
+                  }}
+                  aria-pressed={selected}
+                  aria-label={`${camera.label} 카메라 선택 및 궤도 이동, ${quality.label}, 좌우 ${camera.yaw}도, 상하 ${camera.pitch}도${backside ? ", AI 추정 후면 뷰" : ""}`}
+                  title={
+                    backside
+                      ? "드래그해 후면까지 조절 · AI 추정 뷰"
+                      : "드래그해 Yaw와 Pitch를 조절"
+                  }
+                >
+                  <span className="camera-marker-icon">
+                    <Camera className="size-4" aria-hidden="true" />
+                  </span>
+                  <span className="font-mono text-[11px] font-bold tabular-nums">
+                    {camera.label}
+                  </span>
+                  <span
+                    className={cn("size-1.5 rounded-full", {
+                      "bg-stable": quality.level === "stable",
+                      "bg-caution": quality.level === "caution",
+                      "bg-danger": quality.level === "experimental",
+                    })}
+                  />
+                </button>
+              );
+            })}
         </div>
 
-        <span className="border-signal/55 bg-canvas/78 text-signal pointer-events-none absolute left-1/2 top-1/2 z-30 grid size-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border shadow-[0_0_20px_rgba(252,213,53,.18)] backdrop-blur-sm">
-          <Target className="size-3.5" aria-hidden="true" />
-        </span>
-
-        {cameras
-          .map((camera) => ({
-            camera,
-            point: projectCameraToOrbit(camera, orbitView),
-            quality: getCameraQuality(camera),
-          }))
-          .sort((left, right) => left.point.zIndex - right.point.zIndex)
-          .map(({ camera, point, quality }) => {
-            const selected = camera.id === selectedCameraId;
-            const backside = inferBackside(camera);
-            return (
-              <button
-                key={camera.id}
-                type="button"
-                onClick={() => selectCamera(camera.id)}
-                onPointerDown={(event) =>
-                  startCameraDrag(event, camera.id, camera.yaw, camera.pitch)
-                }
-                className={cn(
-                  "camera-marker absolute transition-[left,top,transform,opacity] duration-200 motion-reduce:transition-none",
-                  selected && "camera-marker-selected",
-                  !camera.active && "grayscale",
-                  backside && "border-dashed",
-                )}
-                style={{
-                  left: `${point.leftPercent}%`,
-                  top: `${point.topPercent}%`,
-                  zIndex: point.zIndex,
-                  opacity: camera.active ? point.opacity : 0.34,
-                  transform: `translate(-50%, -50%) scale(${selected ? point.scale * 1.12 : point.scale})`,
-                }}
-                aria-pressed={selected}
-                aria-label={`${camera.label} 카메라 선택 및 궤도 이동, ${quality.label}, 좌우 ${camera.yaw}도, 상하 ${camera.pitch}도${backside ? ", AI 추정 후면 뷰" : ""}`}
-                title={backside ? "드래그해 후면까지 조절 · AI 추정 뷰" : "드래그해 Yaw와 Pitch를 조절"}
-              >
-                <span className="camera-marker-icon">
-                  <Camera className="size-4" aria-hidden="true" />
-                </span>
-                <span className="font-mono text-[11px] font-bold tabular-nums">{camera.label}</span>
-                <span
-                  className={cn("size-1.5 rounded-full", {
-                    "bg-stable": quality.level === "stable",
-                    "bg-caution": quality.level === "caution",
-                    "bg-danger": quality.level === "experimental",
-                  })}
-                />
-              </button>
-            );
-          })}
-
-        <div className="pointer-events-none absolute bottom-3 left-3 z-30 flex flex-wrap items-center gap-2">
+        <div className="pointer-events-none absolute bottom-3 left-3 z-40 flex flex-wrap items-center gap-2">
           <div className="rounded-full border border-white/10 bg-black/48 px-2.5 py-1 text-[11px] font-semibold text-white/72 backdrop-blur-sm">
             생성 범위: Yaw ±180° · Pitch ±80°
           </div>
@@ -303,7 +384,7 @@ export function CameraCanvas() {
           ) : null}
         </div>
 
-        <div className="absolute bottom-3 right-3 z-30 flex items-center gap-2">
+        <div className="absolute bottom-3 right-3 z-40 flex items-center gap-2">
           {selectedBackside ? (
             <div className="hidden max-w-[240px] items-center gap-1.5 rounded-[11px] border border-white/10 bg-black/52 px-3 py-2 text-[11px] text-white/68 backdrop-blur-sm sm:flex">
               <Info className="size-3.5 text-amber-300" aria-hidden="true" />
