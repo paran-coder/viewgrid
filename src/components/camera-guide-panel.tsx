@@ -118,15 +118,18 @@ export function CameraGuidePanel() {
             role="switch"
             aria-checked={guide.enabled}
             className={cn(
-              "secondary-button min-w-[148px] shrink-0 justify-center gap-2 px-3 whitespace-nowrap",
+              "secondary-button grid min-w-[164px] shrink-0 grid-cols-[1fr_40px] items-center gap-3 px-3.5 whitespace-nowrap",
               { "border-signal/45 text-signal": guide.enabled },
             )}
             onClick={() => setGuideEnabled(!guide.enabled)}
             disabled={isGenerating}
           >
+            <span className="min-w-0 text-left font-semibold">
+              API 가이드 {guide.enabled ? "사용" : "미사용"}
+            </span>
             <span
               className={cn(
-                "relative h-5 w-9 shrink-0 rounded-full border transition-colors",
+                "relative block h-5 w-10 shrink-0 overflow-hidden rounded-full border transition-colors",
                 guide.enabled
                   ? "border-signal bg-signal"
                   : "border-hairline-strong bg-elevated",
@@ -135,13 +138,10 @@ export function CameraGuidePanel() {
             >
               <span
                 className={cn(
-                  "absolute top-0.5 size-3.5 rounded-full bg-white transition-transform",
-                  guide.enabled ? "translate-x-[17px]" : "translate-x-0.5",
+                  "absolute left-0.5 top-0.5 block size-3.5 rounded-full bg-white shadow-sm transition-transform",
+                  guide.enabled ? "translate-x-5" : "translate-x-0",
                 )}
               />
-            </span>
-            <span className="shrink-0">
-              API에 {guide.enabled ? "사용" : "미사용"}
             </span>
           </button>
           <button

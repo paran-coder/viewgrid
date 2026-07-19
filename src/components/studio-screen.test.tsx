@@ -49,7 +49,7 @@ describe("StudioScreen workflow", () => {
     expect(
       screen.getByRole("heading", { name: "로컬 카메라 가이드" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("switch", { name: /API에 사용/ })).toHaveAttribute(
+    expect(screen.getByRole("switch", { name: /API 가이드 사용/ })).toHaveAttribute(
       "aria-checked",
       "true",
     );
