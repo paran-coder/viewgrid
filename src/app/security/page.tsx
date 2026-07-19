@@ -6,7 +6,6 @@ export const metadata = {
 };
 
 export default function SecurityPage() {
-  const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/";
 
   return (
     <main className="mx-auto min-h-dvh max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
@@ -52,17 +51,8 @@ export default function SecurityPage() {
           <h2>취약점 제보</h2>
           <p>
             API 키 노출, 출처 검증 우회, 요청 위조나 기타 취약점은 공개 이슈에
-            민감정보를 작성하지 말고 GitHub 저장소의 Security Advisory를 통해
-            비공개로 제보해 주십시오.
+            민감정보를 작성하지 말고 서비스 운영자가 안내한 비공개 보안 채널을 통해 제보해 주십시오.
           </p>
-          <a
-            className="secondary-button mt-4 inline-flex"
-            href={githubUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub 저장소 열기
-          </a>
         </section>
       </div>
     </main>

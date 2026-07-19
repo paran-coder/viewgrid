@@ -1,13 +1,11 @@
 "use client";
 
-import { GitBranch, KeyRound, RotateCcw, Sparkles } from "lucide-react";
+import { KeyRound, RotateCcw, Sparkles } from "lucide-react";
 
 import { BrandMark } from "@/components/brand-mark";
-import { PwaInstallButton } from "@/components/pwa-install-button";
 import { useStudioStore } from "@/store/use-studio-store";
 
 export function AppHeader() {
-  const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/";
   const resetProject = useStudioStore((state) => state.resetProject);
   const openSettings = useStudioStore((state) => state.openSettings);
   const connectionStatus = useStudioStore(
@@ -27,27 +25,20 @@ export function AppHeader() {
           <button
             type="button"
             onClick={openSettings}
-            className="secondary-button hidden sm:inline-flex"
+            className="icon-button"
+            aria-label="API 설정 열기"
+            title="API 설정"
           >
             <span
-              className={`size-2 rounded-full ${
+              className={`absolute right-1.5 top-1.5 size-1.5 rounded-full ${
                 connectionStatus === "connected"
                   ? "bg-stable"
                   : connectionStatus === "failed"
                     ? "bg-danger"
                     : "bg-muted"
               }`}
+              aria-hidden="true"
             />
-            <KeyRound className="size-4" aria-hidden="true" />
-            API 설정
-          </button>
-          <button
-            type="button"
-            onClick={openSettings}
-            className="icon-button sm:hidden"
-            aria-label="API 설정 열기"
-            title="API 설정"
-          >
             <KeyRound className="size-[18px]" aria-hidden="true" />
           </button>
           <button
@@ -59,17 +50,6 @@ export function AppHeader() {
           >
             <RotateCcw className="size-[18px]" aria-hidden="true" />
           </button>
-          <PwaInstallButton />
-          <a
-            className="icon-button"
-            href={githubUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub 열기"
-            title="GitHub"
-          >
-            <GitBranch className="size-[18px]" aria-hidden="true" />
-          </a>
         </div>
       </div>
     </header>

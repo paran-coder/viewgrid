@@ -2,6 +2,16 @@
 
 이 프로젝트는 의미 있는 사용자 변경을 버전별로 기록합니다.
 
+## [1.0.1] - 2026-07-19
+
+### Fixed
+
+- Replaced the flat 3×3 camera marker layout with a subject-centered orbit visualization.
+- Camera markers now move from their Yaw, Pitch, and Distance values and can be dragged to update Yaw/Pitch.
+- Added three orbit rings, depth scaling, and front/back visual ordering for clearer spatial editing.
+- Prevented the local guide API switch label from overlapping its toggle on narrow layouts.
+- Added orbit projection regression tests.
+
 ## 1.0.0 — 2026-07-19
 
 ### 추가

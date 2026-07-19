@@ -117,15 +117,16 @@ export function CameraGuidePanel() {
             type="button"
             role="switch"
             aria-checked={guide.enabled}
-            className={cn("secondary-button min-w-32", {
-              "border-signal/45 text-signal": guide.enabled,
-            })}
+            className={cn(
+              "secondary-button min-w-[148px] shrink-0 justify-center gap-2 px-3 whitespace-nowrap",
+              { "border-signal/45 text-signal": guide.enabled },
+            )}
             onClick={() => setGuideEnabled(!guide.enabled)}
             disabled={isGenerating}
           >
             <span
               className={cn(
-                "relative h-5 w-9 rounded-full border transition-colors",
+                "relative h-5 w-9 shrink-0 rounded-full border transition-colors",
                 guide.enabled
                   ? "border-signal bg-signal"
                   : "border-hairline-strong bg-elevated",
@@ -139,7 +140,9 @@ export function CameraGuidePanel() {
                 )}
               />
             </span>
-            API에 {guide.enabled ? "사용" : "미사용"}
+            <span className="shrink-0">
+              API에 {guide.enabled ? "사용" : "미사용"}
+            </span>
           </button>
           <button
             type="button"
