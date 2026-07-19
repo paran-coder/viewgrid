@@ -1,3 +1,4 @@
+import { inferBackside } from "@/lib/orbit-projection";
 import type { CameraConfig, QualityLevel } from "@/types/camera";
 
 export type QualitySummary = {
@@ -28,7 +29,7 @@ export function getParameterQuality(
 
   if (parameter === "yaw") {
     if (absolute <= 25) return "stable";
-    if (absolute <= 45) return "caution";
+    if (absolute <= 60) return "caution";
     return "experimental";
   }
 
@@ -50,6 +51,7 @@ export function getParameterQuality(
 }
 
 export function getCameraQuality(camera: CameraConfig): QualitySummary {
+  const backside = inferBackside(camera);
   const level = highest([
     getParameterQuality("yaw", camera.yaw),
     getParameterQuality("pitch", camera.pitch),
@@ -64,11 +66,15 @@ export function getCameraQuality(camera: CameraConfig): QualitySummary {
     },
     caution: {
       label: "주의",
-      description: "새로 노출되는 면이 있어 결과 확인이 필요합니다.",
+      description: backside
+        ? "후면에 가까운 시점입니다. 보이지 않는 면은 AI가 추정해 연결합니다."
+        : "새로 노출되는 면이 있어 결과 확인이 필요합니다.",
     },
     experimental: {
-      label: "실험적",
-      description: "원본에 없는 영역을 많이 추론할 수 있습니다.",
+      label: backside ? "AI 추정" : "실험적",
+      description: backside
+        ? "후면 또는 극단 각도입니다. 원본에 없는 면을 AI가 강하게 추정합니다."
+        : "원본에 없는 영역을 많이 추론할 수 있습니다.",
     },
   };
 

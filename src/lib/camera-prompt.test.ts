@@ -42,7 +42,7 @@ describe("camera prompt", () => {
     expect(prompt).toContain(
       "Image 2 is a rough virtual-camera composition guide",
     );
-    expect(prompt).toContain("Do not copy Image 2's blur");
+    expect(prompt).toContain("Do not copy Image 2's frame edges, blur");
     expect(prompt).toContain("Rebuild the final image cleanly from Image 1");
   });
   it("assigns a separate role to a neighboring generated reference", () => {

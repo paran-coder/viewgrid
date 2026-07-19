@@ -68,10 +68,10 @@ export function CameraControls() {
         <ParameterControl
           id="yaw"
           label="좌우 각도"
-          hint="피사체의 왼쪽·오른쪽 면 노출"
+          hint="정면부터 후면까지 자유롭게 회전하는 수평 궤도"
           value={camera.yaw}
-          min={-60}
-          max={60}
+          min={-180}
+          max={180}
           step={1}
           suffix="°"
           onChange={(value) => updateCamera(camera.id, "yaw", value)}
@@ -79,10 +79,10 @@ export function CameraControls() {
         <ParameterControl
           id="pitch"
           label="상하 각도"
-          hint="높은 위치에서 내려보기 또는 올려보기"
+          hint="아래에서 올려보거나 위에서 내려보는 수직 궤도"
           value={camera.pitch}
-          min={-30}
-          max={30}
+          min={-80}
+          max={80}
           step={1}
           suffix="°"
           onChange={(value) => updateCamera(camera.id, "pitch", value)}

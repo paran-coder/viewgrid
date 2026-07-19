@@ -18,7 +18,8 @@ describe("camera quality", () => {
   it("classifies stable, caution and experimental yaw ranges", () => {
     expect(getParameterQuality("yaw", 25)).toBe("stable");
     expect(getParameterQuality("yaw", -26)).toBe("caution");
-    expect(getParameterQuality("yaw", 46)).toBe("experimental");
+    expect(getParameterQuality("yaw", 46)).toBe("caution");
+    expect(getParameterQuality("yaw", 81)).toBe("experimental");
   });
 
   it("uses the riskiest parameter as the camera quality", () => {

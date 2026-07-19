@@ -39,7 +39,7 @@ describe("ViewGrid JSON preset", () => {
     raw.cameras[0].yaw = 999;
     raw.cameras[0].fov = -5;
     const parsed = parsePresetDocument(JSON.stringify(raw));
-    expect(parsed.cameras[0].yaw).toBe(60);
+    expect(parsed.cameras[0].yaw).toBe(180);
     expect(parsed.cameras[0].fov).toBe(20);
   });
 

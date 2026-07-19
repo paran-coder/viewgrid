@@ -109,8 +109,8 @@ type StudioState = {
 };
 
 const LIMITS = {
-  yaw: [-60, 60],
-  pitch: [-30, 30],
+  yaw: [-180, 180],
+  pitch: [-80, 80],
   roll: [-20, 20],
   fov: [20, 100],
   distance: [0.6, 2],

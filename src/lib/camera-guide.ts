@@ -59,8 +59,8 @@ export function calculateCameraGuideGeometry(
   sourceHeight: number,
   canvasSize = CAMERA_GUIDE_MAX_EDGE,
 ): CameraGuideGeometry {
-  const yawRatio = clamp(camera.yaw / 60, -1, 1);
-  const pitchRatio = clamp(camera.pitch / 30, -1, 1);
+  const yawRatio = clamp(camera.yaw / 180, -1, 1);
+  const pitchRatio = clamp(camera.pitch / 80, -1, 1);
   const fovScale = clamp(50 / camera.fov, 0.62, 1.48);
   const distanceScale = clamp(1 / camera.distance, 0.56, 1.62);
 
