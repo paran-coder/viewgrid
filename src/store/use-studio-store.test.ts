@@ -118,6 +118,16 @@ afterEach(() => {
 });
 
 describe("useStudioStore generation queue", () => {
+  it("applies a preset, selects C1, and replaces camera values", () => {
+    useStudioStore.getState().updateCamera(1, "yaw", 123);
+    useStudioStore.getState().applyPreset("safe");
+
+    const state = useStudioStore.getState();
+    expect(state.selectedPresetId).toBe("safe");
+    expect(state.selectedCameraId).toBe(1);
+    expect(state.cameras[0]).toMatchObject({ yaw: -15, pitch: 8, fov: 50 });
+  });
+
   it("stores one generated result and clears a one-request API key", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(new Uint8Array([82, 73, 70, 70]), {

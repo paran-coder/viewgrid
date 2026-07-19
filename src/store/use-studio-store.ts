@@ -772,7 +772,7 @@ export const useStudioStore = create<StudioState>((set, get) => ({
     set({
       cameras,
       selectedPresetId: id,
-      selectedCameraId: 5,
+      selectedCameraId: 1,
       view: "editor",
       generation: blankGeneration(cameras),
       generationProgress: 0,

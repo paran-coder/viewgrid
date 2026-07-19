@@ -28,7 +28,7 @@ export function cameraToOrbitVector(
 ): OrbitVector {
   const yaw = radians(camera.yaw);
   const pitch = radians(camera.pitch);
-  const radius = clamp(camera.distance, 0.6, 2);
+  const radius = 0.85 + clamp(camera.distance, 0.6, 2) * 0.5;
 
   return {
     x: radius * Math.sin(yaw) * Math.cos(pitch),
@@ -71,8 +71,8 @@ export function projectOrbitVector(
   const perspectiveDistance = 5.2;
   const perspective = perspectiveDistance / (perspectiveDistance - rotated.z);
 
-  const leftPercent = 50 + rotated.x * 18 * perspective * zoom;
-  const topPercent = 50 - rotated.y * 18 * perspective * zoom;
+  const leftPercent = 50 + rotated.x * 21 * perspective * zoom;
+  const topPercent = 50 - rotated.y * 21 * perspective * zoom;
   const depth = clamp(rotated.z / 2, -1, 1);
   const proximity = (depth + 1) / 2;
   const scale = 0.62 + proximity * 0.46;
@@ -82,7 +82,7 @@ export function projectOrbitVector(
     topPercent: clamp(topPercent, 6, 94),
     depth,
     scale,
-    zIndex: Math.round(20 + proximity * 40),
+    zIndex: Math.round(42 + proximity * 38),
     opacity: 0.3 + proximity * 0.7,
   };
 }
@@ -97,7 +97,7 @@ export function projectCameraToOrbit(
 export function buildRingPath(
   plane: OrbitRingPlane,
   view: OrbitViewState,
-  radius = 1.28,
+  radius = 1.38,
   steps = 84,
 ) {
   const points = Array.from({ length: steps + 1 }, (_, index) => {

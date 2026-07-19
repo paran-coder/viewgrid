@@ -25,7 +25,7 @@ describe("calculateOrbitLayout", () => {
     });
 
     expect(layout.imageWidth).toBeLessThanOrEqual(480);
-    expect(layout.orbitWidth).toBeLessThanOrEqual(864);
-    expect(layout.orbitHeight).toBeLessThanOrEqual(528);
+    expect(layout.orbitWidth).toBeLessThanOrEqual(922);
+    expect(layout.orbitHeight).toBeLessThanOrEqual(564);
   });
 });

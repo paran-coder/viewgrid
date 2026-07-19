@@ -116,7 +116,11 @@ export function PresetBar() {
             <button
               key={preset.id}
               type="button"
-              onClick={() => applyPreset(preset.id)}
+              onClick={() => {
+                applyPreset(preset.id);
+                const first = preset.cameras[0];
+                setMessage(`“${preset.name}” 적용 · C1 Yaw ${first.yaw}° / Pitch ${first.pitch}° / FOV ${first.fov}°`);
+              }}
               className={cn("preset-card", active && "preset-card-active")}
               aria-pressed={active}
             >

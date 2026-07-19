@@ -25,21 +25,21 @@ export function calculateOrbitLayout(input: OrbitLayoutInput): OrbitLayout {
   const sourceHeight = Math.max(1, input.imageHeight);
   const sourceAspect = sourceWidth / sourceHeight;
 
-  const maxImageWidth = stageWidth * (sourceAspect >= 1 ? 0.5 : 0.34);
-  const maxImageHeight = stageHeight * 0.7;
+  const maxImageWidth = stageWidth * (sourceAspect >= 1 ? 0.46 : 0.3);
+  const maxImageHeight = stageHeight * 0.66;
   const fitScale = Math.min(maxImageWidth / sourceWidth, maxImageHeight / sourceHeight);
   const imageWidth = sourceWidth * fitScale;
   const imageHeight = sourceHeight * fitScale;
 
   const orbitWidth = clamp(
-    Math.max(imageWidth * 2.05, imageHeight * 1.18),
-    stageWidth * 0.58,
-    stageWidth * 0.9,
+    Math.max(imageWidth * 2.65, imageHeight * 1.65),
+    stageWidth * 0.78,
+    stageWidth * 0.96,
   );
   const orbitHeight = clamp(
-    Math.max(imageHeight * 1.42, imageWidth * 0.92),
-    stageHeight * 0.58,
-    stageHeight * 0.88,
+    Math.max(imageHeight * 1.78, imageWidth * 1.15),
+    stageHeight * 0.72,
+    stageHeight * 0.94,
   );
 
   return {

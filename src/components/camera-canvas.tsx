@@ -104,6 +104,7 @@ export function CameraCanvas() {
       xy: buildRingPath("xy", orbitView),
       xz: buildRingPath("xz", orbitView),
       yz: buildRingPath("yz", orbitView),
+      outer: buildRingPath("xz", orbitView, 1.68),
     }),
     [orbitView],
   );
@@ -263,28 +264,47 @@ export function CameraCanvas() {
           }}
         >
           <svg
-            className="absolute inset-0 size-full"
+            className="absolute inset-0 z-30 size-full overflow-visible"
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
             aria-hidden="true"
           >
+            <defs>
+              <filter id="orbit-glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="0.45" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <path
+              d={orbitPaths.outer}
+              fill="none"
+              stroke="rgba(252,213,53,.28)"
+              strokeWidth="0.22"
+              strokeDasharray="1.2 1.4"
+            />
             <path
               d={orbitPaths.xy}
               fill="none"
-              stroke="rgba(252,213,53,.35)"
-              strokeWidth="0.15"
+              stroke="rgba(252,213,53,.78)"
+              strokeWidth="0.38"
+              filter="url(#orbit-glow)"
             />
             <path
               d={orbitPaths.xz}
               fill="none"
-              stroke="rgba(16,185,129,.32)"
-              strokeWidth="0.15"
+              stroke="rgba(16,185,129,.66)"
+              strokeWidth="0.34"
+              filter="url(#orbit-glow)"
             />
             <path
               d={orbitPaths.yz}
               fill="none"
-              stroke="rgba(245,158,11,.28)"
-              strokeWidth="0.15"
+              stroke="rgba(245,158,11,.58)"
+              strokeWidth="0.32"
+              filter="url(#orbit-glow)"
             />
           </svg>
 
@@ -314,7 +334,7 @@ export function CameraCanvas() {
             </div>
           </div>
 
-          <span className="border-signal/55 bg-canvas/78 text-signal absolute left-1/2 top-1/2 z-30 grid size-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border shadow-[0_0_20px_rgba(252,213,53,.18)] backdrop-blur-sm">
+          <span className="border-signal/55 bg-canvas/78 text-signal absolute left-1/2 top-1/2 z-[90] grid size-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border shadow-[0_0_20px_rgba(252,213,53,.18)] backdrop-blur-sm">
             <Target className="size-3.5" aria-hidden="true" />
           </span>
 
