@@ -1,0 +1,38 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="40" x2="1050" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E9EDF2"/>
+      <stop offset="1" stop-color="#C9D0D9"/>
+    </linearGradient>
+    <linearGradient id="body" x1="440" y1="210" x2="750" y2="670" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FAFBFC"/>
+      <stop offset="0.55" stop-color="#DDE3E9"/>
+      <stop offset="1" stop-color="#B5BEC9"/>
+    </linearGradient>
+    <linearGradient id="side" x1="736" y1="310" x2="860" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#BAC4CF"/>
+      <stop offset="1" stop-color="#8793A0"/>
+    </linearGradient>
+    <filter id="shadow" x="250" y="620" width="720" height="170" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="30"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" rx="36" fill="url(#bg)"/>
+  <circle cx="180" cy="160" r="90" fill="#F5C451" fill-opacity="0.3"/>
+  <circle cx="1060" cy="760" r="150" fill="#FFFFFF" fill-opacity="0.32"/>
+  <ellipse cx="620" cy="695" rx="300" ry="52" fill="#596575" fill-opacity="0.28" filter="url(#shadow)"/>
+  <path d="M425 248C425 213 453 185 488 185H698C725 185 748 202 757 227L846 493C858 529 831 566 793 566H396C354 566 326 524 342 485L425 248Z" fill="url(#body)"/>
+  <path d="M757 227L846 493C858 529 831 566 793 566H733V276C733 248 743 232 757 227Z" fill="url(#side)"/>
+  <rect x="405" y="541" width="382" height="110" rx="38" fill="#D3DAE2"/>
+  <path d="M405 574C405 556 420 541 438 541H754C772 541 787 556 787 574V595H405V574Z" fill="#F8FAFC"/>
+  <rect x="463" y="274" width="234" height="176" rx="28" fill="#171C22"/>
+  <rect x="481" y="292" width="198" height="140" rx="18" fill="#222B34"/>
+  <circle cx="580" cy="362" r="47" fill="#0E141A" stroke="#667381" stroke-width="8"/>
+  <circle cx="580" cy="362" r="23" fill="#F5C451"/>
+  <rect x="517" y="478" width="126" height="18" rx="9" fill="#929EAA"/>
+  <circle cx="461" cy="487" r="12" fill="#22C995"/>
+  <circle cx="694" cy="487" r="12" fill="#F5C451"/>
+  <path d="M492 185C492 139 529 102 575 102H624C670 102 707 139 707 185" stroke="#9CA8B4" stroke-width="34" stroke-linecap="round"/>
+  <path d="M503 185C503 145 535 113 575 113H624C664 113 696 145 696 185" stroke="#E6EBF0" stroke-width="14" stroke-linecap="round"/>
+  <text x="597" y="621" text-anchor="middle" fill="#4C5865" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="5">VIEWGRID</text>
+</svg>

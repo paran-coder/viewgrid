@@ -1,0 +1,67 @@
+{
+  "name": "viewgrid",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run --pool=threads --maxWorkers=1 --fileParallelism=false",
+    "test:ui": "vitest run src/app src/components --pool=threads --maxWorkers=1",
+    "test:export": "vitest run src/lib/result-export.test.ts --pool=threads --maxWorkers=1",
+    "test:core": "npm run test:core:state && npm run test:core:media",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:update": "playwright test --update-snapshots",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test",
+    "analyze:bundle": "node scripts/analyze-bundle.mjs && prettier --write docs/BUNDLE_REPORT.md",
+    "audit:prod": "npm audit --omit=dev --audit-level=high",
+    "verify:security": "node scripts/verify-security.mjs",
+    "test:core:state": "vitest run src/store/use-studio-store.test.ts src/lib/camera-prompt.test.ts src/lib/presets.test.ts src/lib/providers/gemini.test.ts src/lib/providers/models.test.ts src/lib/quality.test.ts --pool=threads --maxWorkers=1",
+    "test:core:media": "vitest run src/lib/camera-guide.test.ts src/lib/multiview-consistency.test.ts src/lib/output-normalization.test.ts src/lib/project-preset.test.ts src/lib/request-security.test.ts src/lib/security-headers.test.ts src/lib/image-preprocess.test.ts --pool=threads --maxWorkers=1",
+    "prebuild": "node scripts/clean-next-lock.mjs",
+    "pretest": "node scripts/clean-next-output.mjs",
+    "check:build": "npm run build && npm run analyze:bundle"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "jszip": "^3.10.1",
+    "lucide-react": "^1.25.0",
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "tailwind-merge": "^3.6.0",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.61.1",
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.0.3",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "jsdom": "^29.1.1",
+    "prettier": "^3.9.5",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^4.1.10"
+  },
+  "description": "가상 카메라로 멀티앵글 이미지 시트를 설계하는 브라우저 스튜디오",
+  "license": "MIT",
+  "overrides": {
+    "next": {
+      "postcss": "8.5.10"
+    }
+  }
+}
