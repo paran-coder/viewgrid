@@ -288,28 +288,30 @@ export function CameraCanvas() {
             />
           </svg>
 
-          <div
-            className="absolute left-1/2 top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[18px] border border-white/8 bg-black/10 shadow-[0_28px_90px_rgba(0,0,0,.42)] backdrop-blur-[1px]"
-            style={{
-              width: orbitLayout.imageWidth,
-              height: orbitLayout.imageHeight,
-              transform: `translate(-50%, -50%) rotateX(${-orbitView.pitch * 0.6}deg) rotateY(${orbitView.yaw * 0.8}deg) scale(${0.94 + orbitView.zoom * 0.06})`,
-              transformStyle: "preserve-3d",
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={image.url}
-              alt="업로드한 원본"
-              decoding="async"
-              onLoad={(event) =>
-                setSourceSize({
-                  width: event.currentTarget.naturalWidth || 1,
-                  height: event.currentTarget.naturalHeight || 1,
-                })
-              }
-              className="size-full rounded-[14px] object-contain"
-            />
+          <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+            <div
+              className="flex origin-center items-center justify-center rounded-[18px] border border-white/8 bg-black/10 shadow-[0_28px_90px_rgba(0,0,0,.42)] backdrop-blur-[1px]"
+              style={{
+                width: orbitLayout.imageWidth,
+                height: orbitLayout.imageHeight,
+                transform: `rotateX(${-orbitView.pitch * 0.6}deg) rotateY(${orbitView.yaw * 0.8}deg) scale(${0.94 + orbitView.zoom * 0.06})`,
+                transformStyle: "preserve-3d",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={image.url}
+                alt="업로드한 원본"
+                decoding="async"
+                onLoad={(event) =>
+                  setSourceSize({
+                    width: event.currentTarget.naturalWidth || 1,
+                    height: event.currentTarget.naturalHeight || 1,
+                  })
+                }
+                className="size-full rounded-[14px] object-contain"
+              />
+            </div>
           </div>
 
           <span className="border-signal/55 bg-canvas/78 text-signal absolute left-1/2 top-1/2 z-30 grid size-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border shadow-[0_0_20px_rgba(252,213,53,.18)] backdrop-blur-sm">
