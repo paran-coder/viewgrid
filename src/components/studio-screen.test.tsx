@@ -71,7 +71,7 @@ describe("StudioScreen workflow", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /가상 미리보기/ }));
     expect(
-      screen.getByRole("heading", { name: "멀티앵글 생성 결과" }),
+      screen.getByRole("heading", { name: "로컬 카메라 구도 가이드" }),
     ).toBeInTheDocument();
 
     act(() => {

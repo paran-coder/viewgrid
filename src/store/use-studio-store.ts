@@ -720,11 +720,14 @@ export const useStudioStore = create<StudioState>((set, get) => ({
 
   updateCamera: (id, key, value) => {
     const [min, max] = LIMITS[key];
+    const clamped = clamp(value, min, max);
+    const normalized =
+      key === "distance"
+        ? Math.round(clamped * 100) / 100
+        : Math.round(clamped);
     set((state) => ({
       cameras: state.cameras.map((camera) =>
-        camera.id === id
-          ? { ...camera, [key]: clamp(value, min, max) }
-          : camera,
+        camera.id === id ? { ...camera, [key]: normalized } : camera,
       ),
       selectedPresetId: "custom",
     }));

@@ -9,3 +9,14 @@ Object.defineProperty(URL, "revokeObjectURL", {
   writable: true,
   value: () => undefined,
 });
+
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+Object.defineProperty(globalThis, "ResizeObserver", {
+  writable: true,
+  value: ResizeObserverMock,
+});

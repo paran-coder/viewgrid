@@ -29,6 +29,11 @@ import {
 import { cn } from "@/lib/utils";
 import { useStudioStore } from "@/store/use-studio-store";
 
+function formatCameraValue(value: number, digits = 0) {
+  const rounded = Number(value.toFixed(digits));
+  return Object.is(rounded, -0) ? 0 : rounded;
+}
+
 function transformFor(camera: {
   yaw: number;
   pitch: number;
@@ -36,13 +41,14 @@ function transformFor(camera: {
   fov: number;
   distance: number;
 }) {
-  const x = camera.yaw * -0.22;
-  const y = camera.pitch * 0.25;
+  const yawGuide = Math.max(-58, Math.min(58, camera.yaw * 0.48));
+  const pitchGuide = Math.max(-38, Math.min(38, camera.pitch * 0.52));
   const scale = Math.max(
-    0.72,
-    Math.min(1.38, 1.16 / camera.distance + (camera.fov - 50) * 0.002),
+    0.58,
+    Math.min(1.48, (50 / camera.fov) * (1 / camera.distance)),
   );
-  return `translate(${x}%, ${y}%) rotate(${camera.roll}deg) scale(${scale})`;
+
+  return `perspective(900px) rotateY(${yawGuide}deg) rotateX(${-pitchGuide}deg) rotateZ(${camera.roll}deg) scale(${scale})`;
 }
 
 function statusCopy(status?: string) {
@@ -201,11 +207,12 @@ export function ResultsGrid() {
             Contact sheet workspace
           </div>
           <h1 className="text-strong mt-3 text-3xl font-bold tracking-[-0.045em] sm:text-4xl">
-            멀티앵글 생성 결과
+            {run.mode === "prototype" ? "로컬 카메라 구도 가이드" : "멀티앵글 생성 결과"}
           </h1>
           <p className="text-muted mt-2 max-w-3xl text-sm leading-6">
-            활성 카메라를 순차 처리하며, 완료된 결과는 브라우저 메모리에만
-            유지됩니다. 실패하거나 중단된 셀만 다시 실행할 수 있습니다.
+            {run.mode === "prototype"
+              ? "원본 평면에 카메라 방향·Roll·FOV·거리를 시각적으로 적용한 구도 가이드입니다. 실제 측면이나 후면 이미지는 API 생성 버튼을 실행해야 만들어집니다."
+              : "활성 카메라를 순차 처리하며, 완료된 결과는 브라우저 메모리에만 유지됩니다. 실패하거나 중단된 셀만 다시 실행할 수 있습니다."}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -269,6 +276,15 @@ export function ResultsGrid() {
           </button>
         </div>
       </div>
+
+      {run.mode === "prototype" ? (
+        <div className="border-info/30 bg-info/8 text-info mb-4 flex items-start gap-3 rounded-[12px] border px-4 py-3 text-sm leading-6">
+          <WandSparkles className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+          <p>
+            <strong className="font-semibold">LOCAL GUIDE:</strong> 이 화면은 실제 AI 생성 결과가 아닙니다. Yaw·Pitch는 원본 평면의 3D 기울기로 근사하고, FOV·거리·Roll은 구도 변화로 표시합니다.
+          </p>
+        </div>
+      ) : null}
 
       <section
         className="panel overflow-hidden"
@@ -366,6 +382,8 @@ export function ResultsGrid() {
                         transform: isApiResult
                           ? undefined
                           : transformFor(camera),
+                        transformOrigin: "center center",
+                        transformStyle: "preserve-3d",
                       }}
                     />
                     {!isApiResult ? (
@@ -437,10 +455,18 @@ export function ResultsGrid() {
                   <span className="rounded-[7px] border border-white/10 bg-black/60 px-2.5 py-1.5 font-mono text-xs font-bold text-white tabular-nums backdrop-blur-md">
                     {camera.label}
                     <span className="ml-2 font-normal text-white/60">
-                      {camera.yaw}° · {camera.pitch}°
+                      Y {formatCameraValue(camera.yaw)}° · P {formatCameraValue(camera.pitch)}° · R {formatCameraValue(camera.roll)}° · FOV {formatCameraValue(camera.fov)}°
                     </span>
                   </span>
                   <div className="flex items-center gap-2">
+                    {cell?.source === "prototype" ? (
+                      <span
+                        className="rounded-full border border-info/35 bg-info/10 px-2 py-1 text-[10px] font-bold tracking-wide text-info uppercase backdrop-blur-md"
+                        title="실제 생성 결과가 아니라 카메라 방향과 렌즈 변화를 확인하기 위한 2D/3D 구도 가이드입니다."
+                      >
+                        LOCAL GUIDE
+                      </span>
+                    ) : null}
                     {isApiResult ? (
                       <>
                         <span
@@ -648,8 +674,7 @@ export function ResultsGrid() {
                   {previewCamera.label} 확대 결과
                 </p>
                 <p className="text-muted mt-0.5 text-xs">
-                  Yaw {previewCamera.yaw}° · Pitch {previewCamera.pitch}° · FOV{" "}
-                  {previewCamera.fov}°
+                  Yaw {formatCameraValue(previewCamera.yaw)}° · Pitch {formatCameraValue(previewCamera.pitch)}° · Roll {formatCameraValue(previewCamera.roll)}° · FOV {formatCameraValue(previewCamera.fov)}° · Distance {formatCameraValue(previewCamera.distance, 2)}×
                 </p>
               </div>
               <button
